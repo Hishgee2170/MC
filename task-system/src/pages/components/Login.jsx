@@ -57,10 +57,6 @@ const Login = () => {
           />
         </div>
         <div className="form-options">
-          <label className="flex items-center">
-            <input type="checkbox" className="mr-2" />
-            Remember me
-          </label>
           <Link href="#" className="text-sm text-purple-500 hover:underline">
             Forgot password?
           </Link>

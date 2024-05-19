@@ -34,7 +34,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Employee Information Section */}
       <div className="employee-info flex flex-col justify-center items-center">
         <img
           src="naruto.jpg"
@@ -68,7 +67,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Company Notices Section */}
       <div className="company-notices col-span-2">
         <h2 className="sticky top-0 bg-white px-4 py-2 border-b border-gray-300">
           Company Notices

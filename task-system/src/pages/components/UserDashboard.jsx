@@ -56,7 +56,6 @@ const Dashboard = () => {
     handleClick();
     try {
       const response = await fetch("http://localhost:2000/addTask", {
-        // Correct endpoint for adding tasks
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -82,7 +81,6 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      {/* Tasks Section */}
       {showAlert && (
         <Alert
           className="absolute left-[40%]"
@@ -137,7 +135,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Employee Information Section */}
       <div className="employee-info">
         <img
           width="100"
@@ -169,7 +166,6 @@ const Dashboard = () => {
         </Link>
       </div>
 
-      {/* Company Notices Section */}
       <div className="company-notices">
         <h2>Company Notices</h2>
         <ul>
