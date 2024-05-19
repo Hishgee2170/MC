@@ -1,0 +1,368 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.dashboard-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  padding: 20px;
+  background-image: linear-gradient(90deg, #888dee, #fbfbfc);
+  font-family: Arial, sans-serif;
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+.tasks,
+.employee-info,
+.company-notices,
+.logout-button {
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.tasks {
+  flex-direction: column;
+  max-height: calc(100vh - 80px); /* Adjusting to fit within viewport */
+  overflow-y: auto;
+  display: grid;
+  gap: 10px;
+}
+
+.tasks1 {
+  flex-direction: column;
+  max-height: calc(100vh - 80px); /* Adjusting to fit within viewport */
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 10px;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #000;
+  background-color: #e9ecef;
+  transition: background-color 0.3s ease;
+}
+
+.task-item:hover {
+  background-color: #d4d4d4;
+}
+
+.tasks h2 {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  z-index: 1;
+}
+
+.employee-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.employee-info img {
+  border-radius: 50%;
+  margin-bottom: 20px;
+  width: 100px;
+  height: 100px;
+}
+
+.employee-info p {
+  margin: 10px 0;
+}
+
+.logout-button {
+  margin-top: auto;
+  text-align: center;
+}
+
+.logout-button button {
+  padding: 10px 20px;
+  font-size: 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: gainsboro;
+  color: white;
+  cursor: pointer;
+  width: 100%;
+  height: auto;
+}
+
+.logout-button button:hover {
+  background-color: #b30000;
+}
+
+.company-notices {
+  grid-column: 1 / -1; /* Make company notices span full width */
+  max-height: 200px;
+  overflow-y: auto;
+  width: 100%;
+  overflow-y: hidden;
+}
+
+.company-notices ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.company-notices li {
+  background-color: #e9ecef;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+/* Global Styles or in a separate CSS file linked to your project */
+
+/* Container styling */
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f3f4f6;
+}
+
+/* Form wrapper styling */
+.login-form-wrapper {
+  background-color: #ffffff;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Form heading */
+.login-form-wrapper h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 24px;
+  text-align: center;
+  background: linear-gradient(
+    90deg,
+    rgba(91, 33, 182, 1) 0%,
+    rgba(218, 75, 218, 1) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Input fields */
+.login-form-wrapper input {
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.login-form-wrapper input:focus {
+  border-color: #7c3aed;
+}
+
+/* Remember me and forgot password */
+.login-form-wrapper .form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.login-form-wrapper .form-options a {
+  font-size: 14px;
+  color: #7c3aed;
+  text-decoration: none;
+}
+
+.login-form-wrapper .form-options a:hover {
+  text-decoration: underline;
+}
+
+/* Login button */
+.login-form-wrapper button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(
+    90deg,
+    rgba(91, 33, 182, 1) 0%,
+    rgba(218, 75, 218, 1) 100%
+  );
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-form-wrapper button:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(218, 75, 218, 1) 0%,
+    rgba(91, 33, 182, 1) 100%
+  );
+}
+
+/* Signup link */
+.login-form-wrapper p {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.login-form-wrapper p a {
+  color: #7c3aed;
+  text-decoration: none;
+}
+
+.login-form-wrapper p a:hover {
+  text-decoration: underline;
+}
+
+/* Global Styles or in a separate CSS file linked to your project */
+
+/* Container styling */
+.signup-container,
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f3f4f6;
+}
+
+/* Form wrapper styling */
+.signup-form-wrapper,
+.login-form-wrapper {
+  background-color: #ffffff;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Form heading */
+.signup-form-wrapper h2,
+.login-form-wrapper h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 24px;
+  text-align: center;
+  background: linear-gradient(
+    90deg,
+    rgba(91, 33, 182, 1) 0%,
+    rgba(218, 75, 218, 1) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Input fields */
+.signup-form-wrapper input,
+.login-form-wrapper input {
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
+  font-weight: 500; /* Added font weight */
+}
+
+.signup-form-wrapper input:focus,
+.login-form-wrapper input:focus {
+  border-color: #7c3aed;
+}
+
+/* Sign Up and Login button */
+.signup-form-wrapper button,
+.login-form-wrapper button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(
+    90deg,
+    rgba(91, 33, 182, 1) 0%,
+    rgba(218, 75, 218, 1) 100%
+  );
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.signup-form-wrapper button:hover,
+.login-form-wrapper button:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(218, 75, 218, 1) 0%,
+    rgba(91, 33, 182, 1) 100%
+  );
+}
+
+/* Additional form options and links */
+.signup-form-wrapper .form-options,
+.login-form-wrapper .form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.signup-form-wrapper .form-options a,
+.login-form-wrapper .form-options a {
+  font-size: 14px;
+  color: #7c3aed;
+  text-decoration: none;
+}
+
+.signup-form-wrapper .form-options a:hover,
+.login-form-wrapper .form-options a:hover {
+  text-decoration: underline;
+}
+
+/* Signup and Login link */
+.signup-form-wrapper p,
+.login-form-wrapper p {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.signup-form-wrapper p a,
+.login-form-wrapper p a {
+  color: #7c3aed;
+  text-decoration: none;
+}
+
+.signup-form-wrapper p a:hover,
+.login-form-wrapper p a:hover {
+  text-decoration: underline;
+}
