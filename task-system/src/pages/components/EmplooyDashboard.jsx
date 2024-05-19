@@ -1,9 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import mockdata from "@/pages/mockdata";
 import Modal from "./Modal";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 const Dashboard = () => {
   const [selectedTask, setSelectedTask] = useState(null);
+  const [employeeData, setEmployeeData] = useState({});
+  const router = useRouter();
+  const { query } = router;
+
+  useEffect(() => {
+    if (query) {
+      setEmployeeData(query);
+      console.log(query);
+    }
+  }, [query]);
 
   const handleClick = (task) => {
     setSelectedTask(task);
@@ -43,28 +55,27 @@ const Dashboard = () => {
           height="100"
         />
         <p className="text-left w-full max-w-xs mb-2">
-          <strong>Employee ID:</strong> 12345
-        </p>
-        <p className=" text-left w-full max-w-xsmb-2">
-          <strong>Name:</strong> John
+          <strong>Employee ID:</strong> {employeeData.employeeId}
         </p>
         <p className="text-left w-full max-w-xs mb-2">
-          <strong>Name:</strong> John
+          <strong>Name:</strong> {employeeData.firstName}
         </p>
         <p className="text-left w-full max-w-xs mb-2">
-          <strong>Surname:</strong> Doe
+          <strong>Surname:</strong> {employeeData.lastName}
         </p>
         <p className="text-left w-full max-w-xs mb-2">
-          <strong>Email:</strong> john.doe@xyz.com
+          <strong>Email:</strong> {employeeData.email}
         </p>
         <p className="text-left w-full max-w-xs mb-2">
-          <strong>Phone:</strong> 123-456-7890
+          <strong>Phone:</strong> {employeeData.phone}
         </p>
-        <div className="logout-button mt-auto">
-          <button className="bg-gray-700 hover:bg-gray-800 text-white py-2 px-4 rounded-md">
-            Logout
-          </button>
-        </div>
+        <Link href="../">
+          <div className="logout-button mt-auto">
+            <button className="bg-gray-700 hover:bg-gray-800 text-white py-2 px-4 rounded-md">
+              Logout
+            </button>
+          </div>
+        </Link>
       </div>
 
       <div className="company-notices col-span-2">

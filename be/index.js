@@ -88,7 +88,6 @@ app.get("/addTask", async (request, response) => {
   }
 });
 
-
 app.post("/EmployeeSignUp", async (request, response) => {
   try {
     const { firstName, lastName, email, password } = request.body;
@@ -125,7 +124,7 @@ app.post("/EmployeesLogin", async (request, response) => {
   const [tasks] =
     await sql`SELECT * FROM task WHERE employee_id = ${user.employee_id}`;
   const allEmployeeData = { user, tasks };
-  console.log(user);
+  console.log(tasks);
   if (!user) {
     return response.status(401).send("Invalid email or password");
   }
