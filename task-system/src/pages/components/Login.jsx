@@ -72,6 +72,9 @@ const Login = () => {
           <Link href="../components/SignUp">
             <div className="text-purple-500 hover:underline">Signup now</div>
           </Link>
+          <Link href="../">
+            <div className="text-purple-500 hover:underline">Choose Role</div>
+          </Link>
         </div>
       </div>
     </div>

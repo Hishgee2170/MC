@@ -33,7 +33,7 @@ const EmployeeLogin = () => {
             firstName: data.user.firstname,
             lastName: data.user.lastname,
             email: data.user.gmail,
-            phone: data.user.phone_number,  
+            phone: data.user.phone_number,
             tasks: JSON.stringify(data.tasks),
           },
         });
@@ -78,6 +78,9 @@ const EmployeeLogin = () => {
           Not a member?
           <Link href="../components/EmployeeSignUp">
             <div className="text-purple-500 hover:underline">Signup now</div>
+          </Link>
+          <Link href="../">
+            <div className="text-purple-500 hover:underline">Choose Role</div>
           </Link>
         </div>
       </div>
