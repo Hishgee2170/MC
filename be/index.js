@@ -155,6 +155,22 @@ app.get("/getEmployeeName", async (request, response) => {
     console.log("err", error);
   }
 });
+app.post("/addTaskLog", async (request, response) => {
+  try {
+    const { task_log, task_id, employee_id } = request.body;
+    const id = uuid();
+    await sql`
+      INSERT INTO log(log_id, task_id, employee_id, explanation) 
+      VALUES (${id}, ${task_id}, ${employee_id}, ${task_log})
+    `;
+    const logData = await sql`SELECT * FROM log`;
+    console.log("Log added successfully");
+    response.status(200).send(logData);
+  } catch (error) {
+    console.error("Error:", error);
+    response.status(500).send("Internal Server Error");
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);

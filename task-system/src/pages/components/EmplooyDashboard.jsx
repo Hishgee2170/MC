@@ -20,8 +20,11 @@ const Dashboard = () => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [employeeData, setEmployeeData] = useState({});
   const [employeeTasks, setEmployeeTasks] = useState([]);
-  const [open, setOpen] = useState(false); // Define the state for the modal visibility
+  const [open, setOpen] = useState(false);
+  const [howToDo, setHowToDo] = useState("");
+  const [explanationData, setExplanationData] = useState([]);
   const API_DATABASE = "http://localhost:2000/EmployeeTasks";
+  const API_LOG = "http://localhost:2000/addTaskLog";
 
   const router = useRouter();
   const { query } = router;
@@ -37,8 +40,38 @@ const Dashboard = () => {
     setOpen(true); // Open the modal when a task is clicked
   };
 
-  const closeModal = () => {
-    setOpen(false); // Close the modal
+  const closeModal = async () => {
+    setOpen(false);
+    sendLog();
+    setHowToDo("");
+  };
+
+  const sendLog = async () => {
+    try {
+      const response = await fetch(`${API_LOG}`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          task_log: howToDo,
+          task_id: selectedTask.task_id,
+          employee_id: employeeData.employeeId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      console.log("Log sent successfully");
+      const logData = await response.json();
+      setExplanationData([logData]);
+      console.log(explanationData);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   const getTasks = async () => {
@@ -59,7 +92,6 @@ const Dashboard = () => {
       }
 
       const tasks = await response.json();
-      console.log("newData:", tasks);
       setEmployeeTasks(tasks);
     } catch (error) {
       console.error("Error:", error);
@@ -86,8 +118,8 @@ const Dashboard = () => {
               onClick={() => handleClick(el)}
               className="task-item block py-2 px-4 hover:bg-blue-300 cursor-pointer"
             >
-              <div>{el.name}</div>
-              <div>{el.task_id}</div>
+              <div>Task Name: {el.name}</div>
+              <div>Task Explanation: {el.explanation}</div>
             </div>
           ))}
         </div>
@@ -152,6 +184,28 @@ const Dashboard = () => {
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
               {selectedTask.task_id}
             </Typography>
+            <strong>
+              <span>Log:</span>
+              {explanationData?.map((el, i) => (
+                <div key={i}>
+                  <span>{el.explanation}</span>
+                </div>
+              ))}
+            </strong>
+            <textarea
+              className="w-full border-[1px]"
+              value={howToDo}
+              onChange={(e) => {
+                setHowToDo(e.target.value);
+              }}
+              placeholder="Yaj hiih we"
+            />
+            <div
+              className="w-full flex justify-center items-center bg-gray-100 shadow-lg"
+              onClick={closeModal}
+            >
+              Ok
+            </div>
           </Box>
         </Modal>
       )}
