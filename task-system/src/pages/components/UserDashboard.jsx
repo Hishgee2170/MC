@@ -1,24 +1,40 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Alert from "@mui/material/Alert";
-import CheckIcon from "@mui/icons-material/check";
+import CheckIcon from "@mui/icons-material/Check";
 import Link from "next/link";
 
 const Dashboard = () => {
   const [showAlert, setShowAlert] = useState(false);
-  const API_DATABASE = "http://localhost:2000/addTask"; // Correct endpoint to fetch tasks
   const [tasks, setTasks] = useState([]);
-  const router = useRouter();
-  const { query } = router;
   const [userData, setUserData] = useState({});
   const [taskName, setTaskName] = useState("");
   const [employeeId, setEmployeeId] = useState("");
+  const [taskExplanation, setTaskExplanation] = useState("");
+  const [employeeData, setEmployeeData] = useState([]);
+  const API_DATABASE = "http://localhost:2000/addTask";
+  const API_DATABASE_EMPLOYEE_DATA = "http://localhost:2000/getEmployeeName";
+  const API_DATABASE_PULL_TASKS = "http://localhost:2000/pullTasks";
+  const router = useRouter();
+  const { query } = router;
+
   useEffect(() => {
     if (query) {
       setUserData(query);
       console.log(query);
     }
   }, [query]);
+
+  useEffect(() => {
+    if (userData.customer_id) {
+      getData();
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    getEmployeeName();
+  }, []);
+
   const handleClick = () => {
     setShowAlert(true);
     setTimeout(() => {
@@ -26,14 +42,29 @@ const Dashboard = () => {
     }, 3000);
   };
 
-  useEffect(() => {
-    getData(); // Fetch data when the component mounts
-  }, []);
+  const getEmployeeName = async () => {
+    try {
+      const response = await fetch(API_DATABASE_EMPLOYEE_DATA, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const employeeData = await response.json();
+      setEmployeeData(employeeData);
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
 
   const getData = async () => {
     try {
       const response = await fetch(
-        `${API_DATABASE}?userId=${userData.customer_id}`,
+        `${API_DATABASE_PULL_TASKS}?userId=${userData.customer_id}`,
         {
           method: "GET",
           headers: {
@@ -55,7 +86,7 @@ const Dashboard = () => {
   const addTask = async () => {
     handleClick();
     try {
-      const response = await fetch("http://localhost:2000/addTask", {
+      const response = await fetch(API_DATABASE, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -65,6 +96,7 @@ const Dashboard = () => {
           taskName,
           employeeId,
           userId: userData.customer_id,
+          taskExplanation,
         }),
       });
 
@@ -72,19 +104,24 @@ const Dashboard = () => {
         throw new Error("Network response was not ok");
       }
       const newdata = await response.json();
-      setTasks(newdata);
-      console.log("newTask:", newdata);
+      setTasks((prevTasks) => [...prevTasks, newdata]);
+      setTaskName("");
+      setEmployeeId("");
+      setTaskExplanation("");
     } catch (error) {
       console.error("Error:", error);
     }
   };
+  useEffect(() => {
+    console.log("task changed");
+  }, [tasks]);
 
   return (
     <div className="dashboard-container">
       {showAlert && (
         <Alert
           className="absolute left-[40%]"
-          ikon={<CheckIcon fontSize="inherit" />}
+          icon={<CheckIcon fontSize="inherit" />}
           severity="success"
         >
           Sent task
@@ -97,7 +134,7 @@ const Dashboard = () => {
         <div className="task-list">
           {tasks.map((task, index) => (
             <div className="task-item" key={index}>
-              <span>EmployeeID: {task.employee_id}</span>
+              <span>Employee ID: {task.employee_id}</span>
               <span>Task Name: {task.name}</span>
             </div>
           ))}
@@ -112,22 +149,38 @@ const Dashboard = () => {
               }}
             >
               <div className="task-list">
-                <input
-                  type="text"
-                  placeholder="Employee ID"
+                <select
                   value={employeeId}
                   onChange={(e) => setEmployeeId(e.target.value)}
-                />
+                >
+                  <option value="" disabled>
+                    Select Employee
+                  </option>
+                  {employeeData.map((el, i) => (
+                    <option
+                      className="text-[black]"
+                      key={i}
+                      value={el.employee_id}
+                    >
+                      {el.firstname}
+                    </option>
+                  ))}
+                </select>
                 <input
                   type="text"
                   placeholder="Task Name"
                   value={taskName}
                   onChange={(e) => setTaskName(e.target.value)}
                 />
+                <textarea
+                  type="text"
+                  placeholder="Task Explanation"
+                  value={taskExplanation}
+                  className="h-[200px]"
+                  onChange={(e) => setTaskExplanation(e.target.value)}
+                />
                 <div className="logout-button">
-                  <button onClick={addTask} type="submit">
-                    Add Task
-                  </button>
+                  <button type="submit">Add Task</button>
                 </div>
               </div>
             </form>

@@ -1,4 +1,4 @@
-import express from "express";
+import express, { response } from "express";
 import cors from "cors";
 import sql from "./config/database.js"; // Ensure this path is correct
 import { v4 as uuid } from "uuid";
@@ -56,13 +56,13 @@ app.post("/Login", async (request, response) => {
   }
 });
 app.post("/addTask", async (request, response) => {
-  const { employeeId, taskName, userId } = request.body;
+  const { employeeId, taskName, userId, taskExplanation } = request.body;
   const task_id = uuid();
   try {
     console.log(request.body);
 
-    await sql`INSERT INTO task (customer_id, name, employee_id, task_id) 
-              VALUES (${userId}, ${taskName}, ${employeeId}, ${task_id})`;
+    await sql`INSERT INTO task (customer_id, name, employee_id, task_id , explanation) 
+              VALUES (${userId}, ${taskName}, ${employeeId}, ${task_id} , ${taskExplanation})`;
 
     const tasks = await sql`SELECT * FROM task WHERE customer_id = ${userId}`;
 
@@ -78,7 +78,8 @@ app.get("/pullTasks", async (request, response) => {
   try {
     const userId = request.query.userId;
     console.log(userId);
-    const [tasks] = await sql`SELECT * FROM task WHERE customer_id = ${userId}`;
+    const tasks = await sql`SELECT * FROM task WHERE customer_id = ${userId}`;
+    console.log(tasks);
     response.status(200).send(tasks);
   } catch (error) {
     console.error("Error:", error);
@@ -135,13 +136,23 @@ app.post("/EmployeesLogin", async (request, response) => {
 });
 app.get("/EmployeeTasks", async (request, response) => {
   const employee_id = request.query.employee_id;
-  const [tasks] =
+  const tasks =
     await sql`SELECT * FROM task WHERE employee_id = ${employee_id}`;
   console.log(tasks);
   if (tasks) {
     response.status(200).send(tasks);
   } else {
     response.status(400).send("Bad request");
+  }
+});
+
+app.get("/getEmployeeName", async (request, response) => {
+  try {
+    const employeeNameData =
+      await sql`SELECT firstname, employee_id FROM employees`;
+    response.send(employeeNameData);
+  } catch (error) {
+    console.log("err", error);
   }
 });
 

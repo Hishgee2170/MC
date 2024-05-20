@@ -1,13 +1,26 @@
 import React, { useState, useEffect } from "react";
-import Modal from "./Modal";
+import Modal from "@mui/material/Modal";
+import { Box, Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 const Dashboard = () => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [employeeData, setEmployeeData] = useState({});
   const [employeeTasks, setEmployeeTasks] = useState([]);
-  const taskss = [];
+  const [open, setOpen] = useState(false); // Define the state for the modal visibility
   const API_DATABASE = "http://localhost:2000/EmployeeTasks";
 
   const router = useRouter();
@@ -16,27 +29,30 @@ const Dashboard = () => {
   useEffect(() => {
     if (Object.keys(query).length > 0) {
       setEmployeeData(query);
-      console.log(query);
     }
   }, [query]);
 
   const handleClick = (task) => {
     setSelectedTask(task);
+    setOpen(true); // Open the modal when a task is clicked
   };
 
   const closeModal = () => {
-    setSelectedTask(null);
+    setOpen(false); // Close the modal
   };
 
   const getTasks = async () => {
     try {
-      const response = await fetch(`${API_DATABASE}?employee_id=emp001`, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `${API_DATABASE}?employee_id=${query.employeeId}`,
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -44,18 +60,15 @@ const Dashboard = () => {
 
       const tasks = await response.json();
       console.log("newData:", tasks);
-      taskss.push(tasks);
-      setEmployeeTasks([tasks]);
-      // console.log(taskss[0].name);
+      setEmployeeTasks(tasks);
     } catch (error) {
       console.error("Error:", error);
-      setEmployeeTasks([]); // Ensure we have an array even if there's an error
+      setEmployeeTasks([]);
     }
   };
 
   useEffect(() => {
     if (query.employeeId) {
-      console.log(query.employeeId);
       getTasks();
     }
   }, [query.employeeId]);
@@ -67,7 +80,6 @@ const Dashboard = () => {
           Tasks
         </h2>
         <div className="task-list overflow-y-auto">
-
           {employeeTasks?.map((el, index) => (
             <div
               key={index}
@@ -126,7 +138,23 @@ const Dashboard = () => {
         </ul>
       </div>
 
-      {selectedTask && <Modal task={selectedTask} onClose={closeModal} />}
+      {selectedTask && (
+        <Modal
+          open={open}
+          onClose={closeModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              {selectedTask.name}
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              {selectedTask.task_id}
+            </Typography>
+          </Box>
+        </Modal>
+      )}
     </div>
   );
 };
