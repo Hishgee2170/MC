@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import mockdata from "@/pages/mockdata";
 import Modal from "./Modal";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -7,11 +6,15 @@ import { useRouter } from "next/router";
 const Dashboard = () => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [employeeData, setEmployeeData] = useState({});
+  const [employeeTasks, setEmployeeTasks] = useState([]);
+  const taskss = [];
+  const API_DATABASE = "http://localhost:2000/EmployeeTasks";
+
   const router = useRouter();
   const { query } = router;
 
   useEffect(() => {
-    if (query) {
+    if (Object.keys(query).length > 0) {
       setEmployeeData(query);
       console.log(query);
     }
@@ -25,6 +28,38 @@ const Dashboard = () => {
     setSelectedTask(null);
   };
 
+  const getTasks = async () => {
+    try {
+      const response = await fetch(`${API_DATABASE}?employee_id=emp001`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const tasks = await response.json();
+      console.log("newData:", tasks);
+      taskss.push(tasks);
+      setEmployeeTasks([tasks]);
+      // console.log(taskss[0].name);
+    } catch (error) {
+      console.error("Error:", error);
+      setEmployeeTasks([]); // Ensure we have an array even if there's an error
+    }
+  };
+
+  useEffect(() => {
+    if (query.employeeId) {
+      console.log(query.employeeId);
+      getTasks();
+    }
+  }, [query.employeeId]);
+
   return (
     <div className="dashboard-container grid grid-cols-2 gap-20 p-20 bg-gradient-to-r from-blue-500 to-blue-700 font-sans">
       <div className="tasks">
@@ -32,23 +67,23 @@ const Dashboard = () => {
           Tasks
         </h2>
         <div className="task-list overflow-y-auto">
-          {mockdata.map((el, index) => (
-            <a
+
+          {employeeTasks?.map((el, index) => (
+            <div
               key={index}
               onClick={() => handleClick(el)}
-              href="#"
-              className="task-item"
+              className="task-item block py-2 px-4 hover:bg-blue-300 cursor-pointer"
             >
-              <span>{el.name}</span>
-              <span>{el.id}</span>
-            </a>
+              <div>{el.name}</div>
+              <div>{el.task_id}</div>
+            </div>
           ))}
         </div>
       </div>
 
       <div className="employee-info flex flex-col justify-center items-center">
         <img
-          src="naruto.jpg"
+          src="https://static.vecteezy.com/system/resources/previews/002/318/271/large_2x/user-profile-icon-free-vector.jpg"
           alt="Employee Photo"
           className="rounded-full mb-4"
           width="100"

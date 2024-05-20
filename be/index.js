@@ -74,12 +74,12 @@ app.post("/addTask", async (request, response) => {
       .send({ error: "An error occurred while adding the task" });
   }
 });
-app.get("/addTask", async (request, response) => {
+app.get("/pullTasks", async (request, response) => {
   try {
     const userId = request.query.userId;
     console.log(userId);
-    const tasks = await sql`SELECT * FROM task WHERE customer_id = ${userId}`;
-    response.status(200).json(tasks);
+    const [tasks] = await sql`SELECT * FROM task WHERE customer_id = ${userId}`;
+    response.status(200).send(tasks);
   } catch (error) {
     console.error("Error:", error);
     response
@@ -121,10 +121,8 @@ app.post("/EmployeesLogin", async (request, response) => {
   const { gmail, password } = request.body;
   let jump = false;
   const [user] = await sql`SELECT * FROM employees WHERE gmail = ${gmail}`;
-  const [tasks] =
-    await sql`SELECT * FROM task WHERE employee_id = ${user.employee_id}`;
-  const allEmployeeData = { user, tasks };
-  console.log(tasks);
+
+  const allEmployeeData = { user };
   if (!user) {
     return response.status(401).send("Invalid email or password");
   }
@@ -133,6 +131,17 @@ app.post("/EmployeesLogin", async (request, response) => {
     return response.status(200).send(allEmployeeData);
   } else {
     return response.status(401).send(jump);
+  }
+});
+app.get("/EmployeeTasks", async (request, response) => {
+  const employee_id = request.query.employee_id;
+  const [tasks] =
+    await sql`SELECT * FROM task WHERE employee_id = ${employee_id}`;
+  console.log(tasks);
+  if (tasks) {
+    response.status(200).send(tasks);
+  } else {
+    response.status(400).send("Bad request");
   }
 });
 

@@ -34,7 +34,6 @@ const EmployeeLogin = () => {
             lastName: data.user.lastname,
             email: data.user.gmail,
             phone: data.user.phone_number,
-            tasks: JSON.stringify(data.tasks),
           },
         });
       }
